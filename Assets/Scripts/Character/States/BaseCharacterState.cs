@@ -1,12 +1,15 @@
+using Character.Controllers;
 using Character.Entities;
 using Util.StatePattern;
 
 namespace Character.States {
     public abstract class BaseCharacterState : IState {
-        protected Entities.Character Character;
+        protected CharacterController controller;
 
-        public BaseCharacterState(Entities.Character character) {
-            Character = character;
+        protected float moveSpeed = 0;
+
+        public BaseCharacterState(CharacterController controller) {
+            controller = controller;
         }
         
         public virtual void OnEnter() { }

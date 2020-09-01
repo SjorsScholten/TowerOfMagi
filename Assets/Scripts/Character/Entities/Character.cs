@@ -17,44 +17,27 @@ namespace Character.Entities {
         public CharacterController Controller { get;}
         public StateMachine StateMachine { get; }
 
+        public bool CanWalk { get; set; } = false;
+
         public Character(CharacterController controller, CharacterData data){
             this.Controller = controller;
             this._data = data;
             
             StateMachine = new StateMachine();
-            
-            //initialize states
-            var idle = new Idle(this);
-            var walk = new Walk(this);
-            var run = new Running(this);
-
-            void AT(IState from, IState to, Func<bool> condition) => StateMachine.AddTransition(from, to, condition);
-            
-            //Add Transitions
-            AT(idle, walk, StartMoving());
-            AT(walk, idle, StopMoving());
-            
-            //Conditions
-            Func<bool> StartMoving() => () => MoveForce > 0f;
-            Func<bool> StopMoving() => () => MoveForce < 0.01f;
-            
-            StateMachine.ChangeState(idle);
         }
 
         public void Move(Vector2 input, float initialSpeed, float time, float finalSpeed = 0) {
-            if (input == Vector2.zero) {
-                MoveForce = 0;
-                MoveDirection = Vector3.zero;
+            if(!CanWalk) {
+                MoveForce = Vector3.zero; //cant add force
                 return;
-            }
+            };
             
-            var speed = 5;
-            var acceleration = (speed - initialSpeed) / time;
-            
-            MoveForce = acceleration * _data.Mass;
-            MoveDirection = input.ToDirection();
+            var acceleration = (finalSpeed - initialSpeed) * time;
+            MoveForce = input.ToDirection() * acceleration * _data.Mass;
+            Controller.ProcessForce(MoveForce);
         }
 
+        /*
         public void Jump(float height = 0) {
             //TODO: add downwards velocity of lifter sphere
             if (!IsGrounded) return;
@@ -64,15 +47,16 @@ namespace Character.Entities {
             JumpForce = Mathf.Sqrt(-2 * Physics.gravity.y * jumpHeight) * _data.Mass;
             jumpRequest.Value = true;
         }
+        */
 
         public void LightAttack() { }
 
-
+        /*
         public float JumpForce { get; private set; }
         public bool JumpRequest => jumpRequest.Value;
+        */
 
-        public float MoveForce { get; private set; }
-        public Vector3 MoveDirection { get; private set; }
+        public Vector3 MoveForce { get; private set; }
         
         public bool IsGrounded { get; set; }
     }

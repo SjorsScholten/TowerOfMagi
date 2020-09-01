@@ -1,8 +1,13 @@
-using Character.Entities;
+using Character.Controllers;
 
 namespace Character.States {
     public class Walk : Grounded {
         
-        public Walk(Entities.Character character) : base(character) { }
+        public Walk(CharacterController controller) : base(controller) { }
+
+        public override void OnEnter() {
+            moveSpeed = 5f;
+            base.OnEnter();
+        }
     }
 }

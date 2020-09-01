@@ -1,14 +1,12 @@
-using Character.Entities;
-using UnityEngine;
+using Character.Controllers;
 
 namespace Character.States {
     public abstract class Grounded : BaseCharacterState {
-        protected Grounded(Entities.Character character) : base(character) { }
+        protected Grounded(CharacterController controller) : base(controller) { }
         
         public override void FixedUpdate() {
-            if(Character.JumpRequest) Character.Controller.ProcessImpulse(Character.JumpForce * Vector3.up);
-            Character.Controller.ProcessForce(Character.MoveForce * Character.MoveDirection);
-            
+            //if(Character.JumpRequest) Character.Controller.ProcessImpulse(Character.JumpForce * Vector3.up);
+            controller.HandleCharacterMove(moveSpeed);
             base.FixedUpdate();
         }
     }

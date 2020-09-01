@@ -1,8 +1,8 @@
-using Character.Entities;
+using Character.Controllers;
 
 namespace Character.States {
     public class Jumping : BaseCharacterState {
         
-        public Jumping(Entities.Character character) : base(character) { }
+        public Jumping(CharacterController controller) : base(controller) { }
     }
 }

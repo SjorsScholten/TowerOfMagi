@@ -1,8 +1,8 @@
-using Character.Entities;
+using Character.Controllers;
 
 namespace Character.States {
     public class Running : Grounded {
         
-        public Running(Entities.Character character) : base(character) { }
+        public Running(CharacterController controller) : base(controller) { }
     }
 }
